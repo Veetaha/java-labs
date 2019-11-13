@@ -1,4 +1,5 @@
 target
+bin
 build
 gradle
 .gradle
@@ -7,3 +8,4 @@ gradle
 .vscode
 .classpath
 .project
+.bin
