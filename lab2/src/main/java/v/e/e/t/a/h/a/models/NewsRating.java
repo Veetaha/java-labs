@@ -2,11 +2,15 @@ package v.e.e.t.a.h.a.models;
 
 import java.util.Objects;
 
+import v.e.e.t.a.h.a.veeorm.annotations.Column;
+import v.e.e.t.a.h.a.veeorm.annotations.Table;
+
+@Table(name = "news_ratings")
 public class NewsRating {
-    long id;
-    long raterId;
-    long newsId;
-    boolean hasLiked;
+    @Column(primary = true) private long id;
+    @Column private long raterId;
+    @Column private long newsId;
+    @Column private boolean hasLiked;
 
     public NewsRating() {}
 
@@ -37,7 +41,8 @@ public class NewsRating {
         if (o == null || getClass() != o.getClass()) return false;
 
         var rating = (NewsRating) o;
-        return Objects.equals(raterId, rating.raterId)
+        return Objects.equals(id, rating.id)
+            && Objects.equals(raterId, rating.raterId)
             && Objects.equals(newsId, rating.newsId)
             && Objects.equals(hasLiked, rating.hasLiked);
     }

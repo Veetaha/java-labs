@@ -1,21 +1,25 @@
 package v.e.e.t.a.h.a.models;
 
-import java.time.LocalDate;
+import java.sql.Timestamp;
 import java.util.Objects;
 
+import v.e.e.t.a.h.a.veeorm.annotations.Column;
+import v.e.e.t.a.h.a.veeorm.annotations.Table;
+
+@Table(name = "news")
 public class News {
-    long id;
-    long creatorId;
-    LocalDate creationDate;
-    String body;
-    String promoImgId;
+    @Column(primary = true) private long id;
+    @Column private long creatorId;
+    @Column private Timestamp creationDate;
+    @Column private String body;
+    @Column private String promoImgId;
 
     public News() {}
 
     public News(
         long id,
         long creatorId,
-        LocalDate creationDate,
+        Timestamp creationDate,
         String body,
         String promoImgId
     ) {
@@ -28,12 +32,12 @@ public class News {
 
     public long getId() { return id; }
     public long getCreatorId() { return creatorId; }
-    public LocalDate getCreationDate() { return creationDate; }
+    public Timestamp getCreationDate() { return creationDate; }
     public String getBody() { return body; }
     public String getPromoImgId() { return promoImgId; }
     public void setId(long value) { this.id = value; }
     public void setCreatorId(long value) { this.creatorId = value; }
-    public void setCreationDate(LocalDate value) { this.creationDate = value; }
+    public void setCreationDate(Timestamp value) { this.creationDate = value; }
     public void setBody(String value) { this.body = value; }
     public void setPromoImgId(String value) { this.promoImgId = value; }
 
@@ -47,5 +51,16 @@ public class News {
             && Objects.equals(creationDate, news.creationDate)
             && Objects.equals(body, news.body)
             && Objects.equals(promoImgId, news.promoImgId);
+    }
+
+    @Override
+    public String toString() {
+        return "News { " +
+            "id: " + id +
+            ", creatorId: " + creatorId +
+            ", creationDate: " + creationDate +
+            ", body: " + body +
+            ", promoImgId: " + promoImgId +
+        " }";
     }
 }

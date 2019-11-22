@@ -1,15 +1,18 @@
 package v.e.e.t.a.h.a.models;
 
-import java.time.LocalDate;
+import java.sql.Timestamp;
 import java.util.Objects;
 
-public class User {
+import v.e.e.t.a.h.a.veeorm.annotations.Column;
+import v.e.e.t.a.h.a.veeorm.annotations.Table;
 
-    long id;
-    String name;
-    String login;
-    LocalDate creationDate;
-    String avatarImgId;
+@Table(name = "users")
+public class User {
+    @Column(primary = true) private long id;
+    @Column private String name;
+    @Column private String login;
+    @Column private Timestamp creationDate;
+    @Column private String avatarImgId;
 
     public User() { }
 
@@ -17,7 +20,7 @@ public class User {
         long id,
         String name,
         String login,
-        LocalDate creationDate,
+        Timestamp creationDate,
         String avatarImgId
     ) {
         this.id = id;
@@ -33,8 +36,8 @@ public class User {
     public void setName(String value) { this.name = value; }
     public String getLogin() { return login; }
     public void setLogin(String value) { this.login = value; }
-    public LocalDate getCreationDate() { return creationDate; }
-    public void setCreationDate(LocalDate value) { this.creationDate = value; }
+    public Timestamp getCreationDate() { return creationDate; }
+    public void setCreationDate(Timestamp value) { this.creationDate = value; }
     public String getAvatarImgId() { return avatarImgId; }
     public void setAvatarImgId(String value) { this.avatarImgId = value; }
 

@@ -2,13 +2,14 @@ package v.e.e.t.a.h.a;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
+
 import v.e.e.t.a.h.a.dao.DAOImpl;
 import v.e.e.t.a.h.a.models.NewsComment;
-import java.time.LocalDate;
+import java.sql.Timestamp;
 
-import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,7 +23,7 @@ class DAOImplNewsCommentTest extends DAOImplTest {
         324,
         24,
         "baadi",
-        LocalDate.of(2019, 11, 20)
+        new Timestamp(2019)
     );
 
     Object getCommentProp(String name, NewsComment comment) {
@@ -31,13 +32,13 @@ class DAOImplNewsCommentTest extends DAOImplTest {
               case "commentatorId": return comment.getCommentatorId();
               case "newsId": return comment.getNewsId();
               case "body": return comment.getBody();
-              case "creationDate": comment.getCreationDate(); 
+              case "creationDate": return comment.getCreationDate(); 
               default: return null;
         }
     }
 
     @Test
-    void getUserById() throws SQLException {
+    void getUserById() throws Exception {
         var commentsService = new DAOImpl<>(NewsComment.class, mockConnection);
 
         when(mockResultSet.next()).thenReturn(true, false);
@@ -46,26 +47,29 @@ class DAOImplNewsCommentTest extends DAOImplTest {
             getCommentProp((String) invokation.getArguments()[0], mockComment)
         );
 
-        assertEquals(commentsService, commentsService.getEntity(42));
+        assertEquals(mockComment, commentsService.getEntity(42));
         assertNull(commentsService.getEntity(412));
     }
 
     @Test
-    void getUsersList() throws SQLException {
+    void getUsersList() throws Exception {
         var commentsService = new DAOImpl<>(NewsComment.class, mockConnection);
 
         when(mockResultSet.next()).thenReturn(false, true, true, false);
 
         assertEquals(commentsService.getEntityList().size(), 0);
 
-        var users = new NewsComment[] { mockComment, mockComment };
-        var iter = Arrays.stream(users).iterator();
+        when(mockResultSet.getObject(anyString())).thenAnswer(new Answer<Object>() {
+            private NewsComment[] comments = new NewsComment[] { mockComment, mockComment };
+            private int i;
 
-        when(mockResultSet.getObject(anyString())).thenAnswer(invokation ->
-            iter.hasNext()
-                ? getCommentProp((String)invokation.getArguments()[0], iter.next())
-                : null
-        );
+            public Object answer(InvocationOnMock invokation) {
+                return getCommentProp(
+                    (String)invokation.getArguments()[0],
+                    comments[i++ / NewsComment.class.getDeclaredFields().length]
+                );
+            }
+        });
         var actual = commentsService.getEntityList();
         var expected = List.of(mockComment, mockComment);
         assertEquals(actual.size(), expected.size());

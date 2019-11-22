@@ -9,7 +9,9 @@ public class Main {
         
         try {
             var newsService = new DAOImpl<>(News.class);
-            System.out.println(newsService.getEntity(3));
+            var entity = newsService.getEntity(1);
+
+            System.out.println(entity.toString());
             System.out.println(newsService.getEntityList());
         } catch (Exception e) {
             e.printStackTrace();

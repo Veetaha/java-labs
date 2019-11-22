@@ -1,4 +1,4 @@
-package v.e.e.t.a.h.a.veeorm;
+package v.e.e.t.a.h.a.veeorm.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@interface Enity {
-    String tableName();
+public @interface Table {
+    String name();
 }

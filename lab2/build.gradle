@@ -5,7 +5,7 @@ plugins {
 
 group 'v.e.e.t.a.h.a'
 version '1.0-SNAPSHOT'
-def mainClassName = 'Main'
+def mainClassName = group + '.' + 'Main'
 
 sourceCompatibility = 1.11
 
@@ -19,7 +19,8 @@ test {
 }
 
 dependencies {
-    compile 'org.postgresql:postgresql:42.2.8',
+    compile 'io.github.cdimascio:java-dotenv:5.1.3'
+    compile 'org.postgresql:postgresql:42.2.8'
     testCompile 'org.mockito:mockito-junit-jupiter:3.1.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
@@ -41,7 +42,7 @@ publishing {
 
 jar {
     manifest {
-        attributes "Main-Class": group + mainClassName
+        attributes "Main-Class": mainClassName
     }
 }
 
