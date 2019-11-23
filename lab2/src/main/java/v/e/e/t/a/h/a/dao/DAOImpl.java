@@ -34,7 +34,7 @@ public class DAOImpl<T> implements IDAOImpl<T> {
             
             return this.dbTable.createEntityFromResultSet(resultSet);
         } catch (Exception e) {
-            System.exit(228);
+            e.printStackTrace();
             return null;
         }
     }
@@ -52,7 +52,7 @@ public class DAOImpl<T> implements IDAOImpl<T> {
             }
             return result;
         } catch (Exception e) {
-            System.exit(228);
+            e.printStackTrace();
             return null;
         }
     }

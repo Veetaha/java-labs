@@ -7,12 +7,10 @@ import v.e.e.t.a.h.a.veeorm.annotations.Column;
 import v.e.e.t.a.h.a.veeorm.annotations.Table;
 
 @Table(name = "news")
-public class News {
-    @Column(primary = true) private long id;
-    @Column private long creatorId;
-    @Column private Timestamp creationDate;
-    @Column private String body;
-    @Column private String promoImgId;
+public class News extends Publication {
+
+    @Column private boolean isBreakingNews;
+    @Column private int importanceDegree;
 
     public News() {}
 
@@ -21,46 +19,37 @@ public class News {
         long creatorId,
         Timestamp creationDate,
         String body,
-        String promoImgId
+        boolean isBreakingNews,
+        int importanceDegree
     ) {
-        this.id = id;
-        this.creatorId = creatorId;
-        this.creationDate = creationDate;
-        this.body = body;
-        this.promoImgId = promoImgId;
+        super(id, creatorId, creationDate, body);
+        this.isBreakingNews = isBreakingNews;
+        this.importanceDegree = importanceDegree;
     }
 
-    public long getId() { return id; }
-    public long getCreatorId() { return creatorId; }
-    public Timestamp getCreationDate() { return creationDate; }
-    public String getBody() { return body; }
-    public String getPromoImgId() { return promoImgId; }
-    public void setId(long value) { this.id = value; }
-    public void setCreatorId(long value) { this.creatorId = value; }
-    public void setCreationDate(Timestamp value) { this.creationDate = value; }
-    public void setBody(String value) { this.body = value; }
-    public void setPromoImgId(String value) { this.promoImgId = value; }
+    public boolean isBreakingNews() { return this.isBreakingNews; }
+    public int getImportanceDegree() { return this.importanceDegree; }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || !(o instanceof News)) return false;
         var news = (News) o;
-        return Objects.equals(id, news.id)
-            && Objects.equals(creatorId, news.creatorId)
-            && Objects.equals(creationDate, news.creationDate)
-            && Objects.equals(body, news.body)
-            && Objects.equals(promoImgId, news.promoImgId);
+
+        return super.equals(o) 
+            && Objects.equals(isBreakingNews, news.isBreakingNews)
+            && Objects.equals(importanceDegree, news.importanceDegree);
     }
 
     @Override
     public String toString() {
         return "News { " +
-            "id: " + id +
-            ", creatorId: " + creatorId +
-            ", creationDate: " + creationDate +
-            ", body: " + body +
-            ", promoImgId: " + promoImgId +
+            "id: " + this.getId() +
+            ", creatorId: " + this.getCreatorId() +
+            ", creationDate: " + this.getCreationDate() +
+            ", body: " + this.getBody() +
+            ", isBreakingNews: " + this.isBreakingNews +
+            ", importanceDegree: " + this.importanceDegree +
         " }";
     }
 }

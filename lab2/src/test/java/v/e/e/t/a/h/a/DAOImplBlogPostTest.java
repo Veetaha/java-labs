@@ -7,7 +7,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 
 import v.e.e.t.a.h.a.dao.DAOImpl;
-import v.e.e.t.a.h.a.models.News;
+import v.e.e.t.a.h.a.models.BlogPost;
 
 import java.sql.Timestamp;
 
@@ -18,56 +18,57 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class DAOImplNewsTest extends DAOImplTest {
-    final News mockNews = new News(
+class DAOImplBlogPostTest extends DAOImplTest {
+    final BlogPost mockNews = new BlogPost(
         42, 32, new Timestamp(2019), 
-        "News body!", //"c0d291fa-017c-4c9e-aa1b-af22412d269b"
-        true, 1
+        "BlogPost body!", 
+        "c0d291fa-017c-4c9e-aa1b-af22412d269b",
+        "sad"
     );
 
-    Object getNewsProp(String name, News news) {
+    Object getBlogPostProp(String name, BlogPost news) {
         switch (name) {
-            case "creationDate":     return news.getCreationDate();
-            case "id":               return news.getId();
-            case "body":             return news.getBody();
-            case "creatorId":        return news.getCreatorId();
-            case "isBreakingNews":   return news.isBreakingNews();
-            case "importanceDegree": return news.getImportanceDegree();
+            case "creationDate":  return news.getCreationDate();
+            case "id":            return news.getId();
+            case "body":          return news.getBody();
+            case "creatorId":     return news.getCreatorId();
+            case "promoImgId":    return news.getPromoImgId();
+            case "promoBlogText": return news.getPromoBlogText();
             default: return null;
         }
     }
 
     @Test
-    void getNewsById() throws Exception {
-        var newsService = new DAOImpl<>(News.class, mockConnection);
+    void getBlogPostById() throws Exception {
+        var blogPostService = new DAOImpl<>(BlogPost.class, mockConnection);
 
         when(mockResultSet.next()).thenReturn(true, false);
 
         when(mockResultSet.getObject(anyString())).thenAnswer(invokation ->
-            getNewsProp((String) invokation.getArguments()[0], mockNews)
+            getBlogPostProp((String) invokation.getArguments()[0], mockNews)
         );
 
-        assertEquals(mockNews, newsService.getEntity(42));
-        assertNull(newsService.getEntity(412));
+        assertEquals(mockNews, blogPostService.getEntity(42));
+        assertNull(blogPostService.getEntity(412));
     }
 
     @Test
-    void getNewsList() throws Exception {
-        var newsService = new DAOImpl<>(News.class, mockConnection);
+    void getBlogPostList() throws Exception {
+        var newsService = new DAOImpl<>(BlogPost.class, mockConnection);
 
         when(mockResultSet.next()).thenReturn(false, true, true, false);
 
         assertEquals(newsService.getEntityList().size(), 0);
 
         when(mockResultSet.getObject(anyString())).thenAnswer(new Answer<Object>() {
-            private News[] news = new News[] { mockNews, mockNews };
+            private BlogPost[] news = new BlogPost[] { mockNews, mockNews };
             private int i;
 
             public Object answer(InvocationOnMock invokation) {
-                return getNewsProp(
+                return getBlogPostProp(
                     (String)invokation.getArguments()[0],
-                    news[i++ / (News.class.getDeclaredFields().length 
-                        + News.class.getSuperclass().getDeclaredFields().length
+                    news[i++ / (BlogPost.class.getDeclaredFields().length +
+                        BlogPost.class.getSuperclass().getDeclaredFields().length
                     )]
                 );
             }

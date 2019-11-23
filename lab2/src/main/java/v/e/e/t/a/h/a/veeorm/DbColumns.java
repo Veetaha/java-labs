@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import v.e.e.t.a.h.a.veeorm.annotations.MappedSuperclass;
+
 /**
  * Represens java to sql columns and sql columns to java fields map collection.
  * 
@@ -12,18 +14,27 @@ import java.util.Iterator;
 public class DbColumns implements Iterable<DbColumn> {
     private DbColumn primaryColumn;
     private HashMap<String, DbColumn> javaNameMap;
-    private HashMap<String, DbColumn> colNameMap;
 
-    public DbColumns(Iterable<Field> fields) throws Exception {
+    public DbColumns(Class<?> entityClass) throws Exception {
         this.javaNameMap = new HashMap<>();
-        this.colNameMap = new HashMap<>();
 
+        addFields(entityClass.getDeclaredFields());
+        var superClass = entityClass.getSuperclass();
+        while (superClass != Object.class && superClass != null) { // naverochku
+            AnnotationService.getAnnotationOrFail(superClass, MappedSuperclass.class);
+            addFields(superClass.getDeclaredFields());
+            superClass = superClass.getSuperclass();
+        }
+        if (primaryColumn == null) {
+            throw new Exception("Table without a primary column is not permitted");
+        }
+
+    }
+
+    private void addFields(Field[] fields) throws Exception {
         for (var field : fields) {
             var col = new DbColumn(field);
             trySetPrimaryColumn(col);
-
-            if (this.colNameMap.put(col.getName(), col) != null)
-                throw new Exception("Duplicate column name within one table: " + col);
 
             this.javaNameMap.put(col.getJavaField().getName(), col); // field names are always unique
         }
@@ -45,10 +56,6 @@ public class DbColumns implements Iterable<DbColumn> {
     }
 
     public DbColumn getColumnByJavaName(String javaName) {
-        return this.javaNameMap.get(javaName);
-    }
-
-    public DbColumn getColumnBySqlName(String javaName) {
         return this.javaNameMap.get(javaName);
     }
 
