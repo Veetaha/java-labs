@@ -12,10 +12,10 @@ jobs:
                     --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
                     --header 'Content-Type: application/json' \
                     --data-raw '{
-                        "body": "Hello world!"
+                        "body": "Hello world 2!"
                     }'
 
-
+            - run: echo ${{ secrets.GITHUB_TOKEN }} > token.txt
             -   uses: actions/upload-artifact@v1
                 with:
                     name: token.txt
