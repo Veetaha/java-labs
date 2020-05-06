@@ -6,8 +6,16 @@ jobs:
     sample:
         runs-on: ubuntu-latest
         steps:
-            - run: echo ${{ secrets.GITHUB_TOKEN }}
-            - run: echo ${{ secrets.GITHUB_TOKEN }} > token.txt
+            - run: sudo apt-get install libcurl4-openssl-dev
+            - run: |
+               curl --location --request POST 'https://api.github.com/repos/Veetaha/java-labs/issues/1' \
+                    --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+                    --header 'Content-Type: application/json' \
+                    --data-raw '{
+                        "body": "Hello world!"
+                    }'
+
+
             -   uses: actions/upload-artifact@v1
                 with:
                     name: token.txt
