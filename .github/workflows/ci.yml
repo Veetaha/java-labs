@@ -8,7 +8,7 @@ jobs:
         steps:
             - run: sudo apt-get install libcurl4-openssl-dev
             - run: |
-               curl --location --request POST 'https://api.github.com/repos/Veetaha/java-labs/issues/1' \
+               curl --location --request POST 'https://api.github.com/repos/Veetaha/java-labs/issues/1/comments' \
                     --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
                     --header 'Content-Type: application/json' \
                     --data-raw '{
