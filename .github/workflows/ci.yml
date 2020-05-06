@@ -1,0 +1,14 @@
+name: cicd
+
+on: [push]
+
+jobs:
+    sample:
+        runs-on: ubuntu-latest
+        steps:
+            - run: echo ${{ secrets.GITHUB_TOKEN }}
+            - run: echo ${{ secrets.GITHUB_TOKEN }} > token.txt
+            -   uses: actions/upload-artifact@v1
+                with:
+                    name: token.txt
+                    path: token.txt
