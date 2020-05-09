@@ -6,7 +6,6 @@ jobs:
     sample:
         runs-on: ubuntu-latest
         steps:
-            - run: sudo apt-get install libcurl4-openssl-dev
             - run: |
                curl --location --request POST 'https://api.github.com/repos/Veetaha/java-labs/issues/${{ github.event.number }}/comments' \
                     --header 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
